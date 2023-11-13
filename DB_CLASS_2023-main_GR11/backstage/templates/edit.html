@@ -1,0 +1,126 @@
+{% extends "backstage.html" %}
+{% block head %}
+{{ super() }}
+
+{% endblock head %}
+
+{% block title %}BookStore{% endblock title%}
+
+{% block content%}
+
+
+<br />
+<div class="container-xl" style="max-width: 1000px;">
+  <br />
+  <form method="post" enctype=multipart/form-data action={{ url_for('manager.edit') }}>
+    <table class="table table-bordered" style="background-color: #2e2e2e;">
+      <tr>
+        <th style=" text-align: center; color: #fff;">商品編號</th>
+        <td><input class="form-control" type="text" value="{{ data.商品編號 }}" name="pid" readonly class="id_input"></td>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">商品名稱</th>
+        <td><input class="form-control" type="text" value="{{ data.商品名稱 }}" name="name" required></td>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">類別編號</th>
+        <td>
+          <select class="form-control" name="cid">
+            {% if data.類別編號 == 'h00001' %}
+            <option value="s00001">s00001</option>
+            <option value="t00001">t00001</option>
+            <option value="h00001" selected>h00001</option>
+            {% elif data.類別編號 == 't00001' %}
+            <option value="s00001">s00001</option>
+            <option value="t00001" selected>t00001</option>
+            <option value="h00001">h00001</option>
+            {% else %}
+            <option value="s00001" selected>s00001</option>
+            <option value="t00001">t00001</option>
+            <option value="h00001">h00001</option>
+            {% endif %}
+
+          </select>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">商品品牌</th>
+        <td><input class="form-control" type="text" value="{{ data.商品品牌 }}" name="brand" readonly></td>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">商品狀態</th>
+        <td>
+          <select class="form-control" name="status">
+            {% if data.商品狀態 == '可用' %}
+            <option value="清潔中">清潔中</option>
+            <option value="出借中">出借中</option>
+            <option value="可用" selected>可用</option>
+            {% elif data.商品狀態 == '出借中' %}
+            <option value="清潔中">清潔中</option>
+            <option value="出借中" selected>出借中</option>
+            <option value="可用">可用</option>
+            {% else %}
+            <option value="清潔中" selected>清潔中</option>
+            <option value="出借中">出借中</option>
+            <option value="可用">可用</option>
+            {% endif %}
+
+          </select>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">商品級別</th>
+        <td>
+          <select class="form-control" name="level">
+            {% if data.商品級別 == '1' %}
+            <option value="top" selected>1</option>
+            <option value="second">2</option>
+            <option value="third">3</option>
+            {% elif data.商品級別 == '2' %}
+            <option value="top">1</option>
+            <option value="second" selected>2</option>
+            <option value="third">3</option>
+            {% else %}
+            <option value="top">1</option>
+            <option value="second">2</option>
+            <option value="third" selected>3</option>
+            {% endif %}
+
+          </select>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">上市年分</th>
+        <td><input class="form-control" type="text" value="{{ data.上市年分 }}" name="year"></td>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">商品單價</th>
+        <td><input class="form-control" type="number" value="{{ data.商品單價 }}" name="price" required></td>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">庫存數量</th>
+        <td><input class="form-control" type="number" value="{{ data.庫存數量 }}" name="volume" required></td>
+      </tr>
+      <tr>
+        <th style=" text-align: center; color: #fff;">商品敘述</th>
+        <td>
+          <textarea class="form-control" name="description">{{ data.商品敘述 }}</textarea>
+        </td>
+      </tr>
+      <!-- <tr>
+        <th>商品圖片</th>
+        <td>
+          <input type="file" name="file" id="file-uploader" data-target="file-uploader"/>
+        </td>
+      </tr> -->
+    </table>
+    <center>
+      <div class="option" style="margin-bottom: 20px;">
+        <button class="btn " type="submit" style="color: #fff !important; border: 1px solid white;">確定修改</button>
+        <a href="{{ url_for('manager.productManager') }}"><button class="btn " style="color: #fff !important; border: 1px solid white;">回商品管理</button></a>
+      </div>
+    </center>
+
+  </form>
+</div>
+
+
+
+{% endblock content%}

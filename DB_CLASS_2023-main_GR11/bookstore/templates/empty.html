@@ -1,0 +1,59 @@
+{% extends "frontstage.html" %}
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block title %}購物車清單{% endblock title%}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'No permission' %}
+
+<script language="javascript">
+  alert('您沒有使用者的權限喔！');
+</script>
+
+{% endif %}
+{% endwith %}
+
+<br />
+
+<div class="container-xxl" style="margin-top: 100px;">
+  <center>
+    <img width="25%" height="25%" src="../static/img/emptycart.png">
+    <p class="empty_cart" style="margin-top: 20px !important;
+    color: #606060 !important;
+    font-size: 20px !important; font-weight: 600;">Your Cart Is Empty</p>
+  </center>
+  <center>
+
+    <a href="{{ url_for('bookstore.bookstore') }}">
+      <!-- <button class="btn btn-outline-success" style="width:30%;">
+        繼續購物
+      </button> -->
+      <button class="btn btn-outline-success" 
+        style="width:30%; --bs-btn-color: #fff !important;
+        --bs-btn-border-color: #fff !important;
+        --bs-btn-hover-color: #fff !important;
+        --bs-btn-hover-bg: #606060 !important;
+        --bs-btn-hover-border-color: #98817B !important;
+        --bs-btn-focus-shadow-rgb: 13,110,253;
+        --bs-btn-active-color: #fff !important;
+        --bs-btn-active-bg: #606060 !important;
+        --bs-btn-active-border-color: #98817B !important;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #606060 !important;
+        --bs-btn-disabled-bg: transparent;
+        --bs-btn-disabled-border-color: #606060 !important;
+        --bs-gradient: none; margin-top: 20px; font-weight: 600;">
+        繼續購物
+      </button>
+    </a>
+
+  </center>
+
+
+</div>
+
+{% endblock content%}

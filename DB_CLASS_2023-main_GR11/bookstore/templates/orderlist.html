@@ -1,0 +1,121 @@
+{% extends "frontstage.html" %}
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block title %}BookStore{% endblock title%}
+
+{% block content %}
+<!-- <form method="post" action="#"> -->
+{% for i in data %}
+<div class="modal fade" id="staticBackdrop{{i.訂單編號}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color: #444040; color: #bab1b1;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">訂單細項列表</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <!-- <table class="table table-bordered" style="--bs-table-bg:#c6bba9 !important;"> -->
+            <table style="--bs-table-bg:#c6bba9 !important;">  
+            <tr>
+              <th style="width: 60%;">
+                <center>商品名稱</center>
+              </th>
+              <th>
+                <center>商品總價</center>
+              </th>
+              <th>
+                <center>訂購數量</center>
+              </th>
+            </tr>
+
+            {% for j in detail %}
+            {% if j.訂單編號 == i.訂單編號 %}
+            <tr>
+              <td>
+                <center>{{ j.商品名稱 }}</center>
+              </td>
+              <td>
+                <center>{{ j.商品總價 }}</center>
+              </td>
+              <td>
+                <center>{{ j.訂購數量 }}</center>
+              </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" style="width:30%;">回訂單</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<!-- </form> -->
+
+
+
+<br />
+<div class="container-xl">
+  <form method="post" action={{ url_for('bookstore.orderlist') }} style="margin-top: 5%;">
+    <table class="table table-bordered" style="--bs-table-bg:#2e2e2e !important;">
+      <tr>
+        <th>
+          <center style="color: #fff !important;">訂單編號</center>
+        </th>
+        <th>
+          <center style="color: #fff !important;">訂單總價</center>
+        </th>
+        <th>
+          <center style="color: #fff !important;">訂單時間</center>
+        </th>
+        <th>
+          <center style="color: #fff !important;">查看訂單</center>
+        </th>
+      </tr>
+      {% for i in data %}
+      <tr>
+        <td>
+          <center style="color: #fff !important; font-weight: 200;">{{ i.訂單編號 }}</center>
+        </td>
+        <td>
+          <center style="color: #fff !important; font-weight: 200;">{{ i.訂單總價 }}</center>
+        </td>
+        <td>
+          <center style="color: #fff !important; font-weight: 200;">{{ i.訂單時間 }}</center>
+        </td>
+        <td width="20%">
+          <center>
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop{{i.訂單編號}}" style="--bs-btn-color: #ffe1d9 !important;
+              --bs-btn-border-color: #ffe1d9 !important;
+              --bs-btn-hover-color: #fff !important;
+              --bs-btn-hover-bg: #98817B !important;
+              --bs-btn-hover-border-color: #98817B !important;
+              --bs-btn-focus-shadow-rgb: 13,110,253;
+              --bs-btn-active-color: #fff !important;
+              --bs-btn-active-bg: #98817B !important;
+              --bs-btn-active-border-color: #98817B !important;
+              --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+              --bs-btn-disabled-color: #98817B !important;
+              --bs-btn-disabled-bg: transparent;
+              --bs-btn-disabled-border-color: #98817B !important;
+              --bs-gradient: none;">
+              查看訂單細項
+            </button>
+          </center>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+  </form>
+</div>
+
+{% endblock content %}

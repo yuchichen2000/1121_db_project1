@@ -1,0 +1,150 @@
+{% extends "frontstage.html" %}
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block title %}BookStore{% endblock title%}
+
+{% block content%}
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'too short' %}
+
+<script language="javascript">
+
+  alert('結束日期須距離開始日期至少一日喔');
+
+</script>
+
+{% endif %}
+{% endwith %}
+
+
+<br />
+
+
+
+<div class="container-xl">
+  <form method="post" action="{{ url_for('bookstore.cart') }}" style="max-width: 1000px; margin-right: auto; margin-left: auto; margin-top: 5%;">
+    <table class="table table-bordered" style="max-width: 800px; margin-left: auto;">
+      <tr>
+        <th>
+          <center>商品編號</center>
+        </th>
+        <th>
+          <center>商品名稱</center>
+        </th>
+        <th>
+          <center>商品價格</center>
+        </th>
+        <th>
+          <center>數量</center>
+        </th>
+      </tr>
+      {% for book in data %}
+      <tr>
+        <td>
+          <center>{{ book.商品編號 }}</center>
+        </td>
+        <td>
+          <center>{{ book.商品名稱 }}</center>
+        </td>
+        <td>
+          <center>{{ book.商品價格 }}</center>
+        </td>
+        <td width="20%">
+          <center>
+            {{ book.數量 }}
+          </center>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div class="col align-self-end">
+      <div class="mb-3" style="display: flex;">
+        <label for="inputProductCategory" class="form-label" style="width: 25%; text-align: center; font-weight: 600;">訂單種類</label>
+        <select id="inputProductCategory" class="form-select" name="type1" required>
+          <option selected disabled value=""  style="width: 75%;">請選擇訂單種類</option>
+          <option value="線上預約" selected>線上預約</option>
+          <option value="實體預約" disabled="disabled">實體預約</option>
+        </select>
+      </div>
+      <!-- 要改設定日期的閥值 -->
+      <div class="mb-3" style="display: flex;">
+        <label for="inputStartDate" class="form-label" style="width: 20%; text-align: center; font-weight: 600;">開始日期</label>
+        <input type="date" class="form-control" id="inputStartDate" name="startDate" min="{{startDate}}"
+          max="{{endDate}}" style="width: 80%;">
+      </div>
+      <div class="mb-3" style="display: flex;">
+        <label for="inputEndDate" class="form-label" style="width: 20%; text-align: center; font-weight: 600;">結束日期</label>
+        <input type="date" class="form-control" id="inputEndDate" name="endDate" min="{{startDate}}" max="{{endDate}}" style="width: 80%;">
+      </div>
+      <div class="mb-3" style="display: flex;">
+        <label for="inputProductCategory" class="form-label" style="width: 20%; text-align: center; font-weight: 600;">取貨方式</label>
+        <select id="inputProductCategory" class="form-select" name="method" required  style="width: 80%;">
+          <option selected disabled value="">請選擇取貨方式</option>
+          <option value="到店" selected>到店</option>
+          <option value="物流" disabled="disabled">物流</option>
+        </select>
+      </div>
+      <div class="mb-3" style="display: flex;">
+        <label for="inputProductCategory" class="form-label" style="width: 20%; text-align: center; font-weight: 600;">卡&emsp;&emsp;號</label>
+        <input class="form-control" type="text" value="{{ data.卡號 }}" name="cardId" readonly style="width: 80%;">
+      </div>
+      <div class="mb-3" style="display: flex;">
+        <label for="inputProductCategory" class="form-label" style="width: 20%; text-align: center; font-weight: 600;">銀行代碼</label>
+        <input class="form-control" type="text" value="{{ data.銀行代碼 }}" name="bankId" readonly style="width: 80%;">
+      </div>
+      <div class="mb-3" style="display: flex;">
+        <label for="inputProductCategory" class="form-label" style="width: 20%; text-align: center; font-weight: 600;">銀行名稱</label>
+        <input class="form-control" type="text" value="{{ data.銀行名稱 }}" name="bankname" readonly style="width: 80%;">
+      </div>
+    </div>
+    <div class="container-xxl" style="text-align: right;">
+      <div class="row">
+        <div class="col align-self-start">
+
+        </div>
+        <div class="col align-self-center">
+
+        </div>
+        <div class="col align-self-end">
+          <b class="ml-50">訂單總價：{{ total }} 元</b>
+        </div>
+      </div>
+    </div>
+
+
+    <center>
+      <div class="option">
+        <a href="{{ url_for('bookstore.cart') }}"><button class="btn btn-primary" type="submit"
+          style="--bs-btn-color: #FFFFFF !important;
+          --bs-btn-bg: #98817B !important;
+          --bs-btn-border-color: #98817B !important;
+          --bs-btn-hover-color: #98817B !important;
+          --bs-btn-hover-bg: #FFFFFF !important;
+          --bs-btn-hover-border-color: #98817B !important;
+          --bs-btn-focus-shadow-rgb: 13,110,253;
+          --bs-btn-active-color: #fff !important;
+          --bs-btn-active-bg: #98817B !important;
+          --bs-btn-active-border-color: #98817B !important;
+          --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+          --bs-btn-disabled-color: #98817B !important;
+          --bs-btn-disabled-bg: transparent;
+          --bs-btn-disabled-border-color: #98817B !important;
+          --bs-gradient: none;">回購物車</button></a>
+        <button class="btn btn-success" type="submit" value="order" name="order">下訂單</button>
+      </div>
+    </center>
+
+  </form>
+</div>
+{% endblock content%}
+
+<script>
+  var today = new Date();
+  var minDate = today.toISOString().slice(0, 10);
+  document.getElementById("inputStartDate").min = minDate;
+  console.log("minDate" + minDate)
+</script>

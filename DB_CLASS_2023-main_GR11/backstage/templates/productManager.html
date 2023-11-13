@@ -1,0 +1,277 @@
+{% extends "backstage.html" %}
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block title %} 商品管理 {% endblock title %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'No permission' %}
+
+<script language="javascript">
+
+    alert('您沒有使用者的權限喔！');
+
+</script>
+
+
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'failed' %}
+
+<script language="javascript">
+
+    alert('有使用者有使用到這筆資料，所以不能刪除');
+
+</script>
+
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'Product already exists' %}
+
+<script language="javascript">
+
+    alert('商品名稱已存在，新增失敗');
+
+</script>
+
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'Cannot be empty' %}
+
+<script language="javascript">
+
+    alert('商品名稱或價格不能為空');
+
+</script>
+
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'Successfully added' %}
+
+<script language="javascript">
+
+    alert('商品已成功新增');
+
+</script>
+
+{% endif %}
+{% endwith %}
+
+
+<script>
+    $(document).ready(function () {
+        $("#keyword").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#product tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+&nbsp;
+&nbsp;
+<div class="d-flex justify-content-between container-xxl">
+    <div class="d-flex col-sm-4">
+        <span class="input-group-text" id="basic-addon1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+        </span>
+        <input class="form-control me-2" id="keyword" placeholder="搜尋商品" aria-label="Search">
+    </div>
+    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="color: white; border: 1px solid white;">
+        新增商品
+    </button>
+</div>
+
+<form method="post" enctype=multipart/form-data action={{ url_for('manager.add') }}>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: #444040; color: #bab1b1;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">新增商品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputProductName" class="form-label">商品名稱</label>
+                        <input type="text" class="form-control" id="inputProductName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputProductCategory" class="form-label">類別編號</label>
+                        <select id="inputProductCategory" class="form-select" name="cid" required>
+                            <option selected disabled value="">請選擇類別</option>
+                            <option value="s00001">s00001</option>
+                            <option value="h00001">h00001</option>
+                            <option value="t00001">t00001</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputProductName" class="form-label">商品品牌</label>
+                        <input type="text" class="form-control" id="inputProductName" name="brand" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputProductCategory" class="form-label">商品狀態</label>
+                        <select id="inputProductCategory" class="form-select" name="status" required>
+                            <option selected disabled value="">請選擇狀態</option>
+                            <option value="可用">可用</option>
+                            <option value="清潔中">清潔中</option>
+                            <option value="出借中">出借中</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputProductCategory" class="form-label">商品級別</label>
+                        <select id="inputProductCategory" class="form-select" name="level" required>
+                            <option selected disabled value="">請選擇級別</option>
+                            <option value="top">1</option>
+                            <option value="second">2</option>
+                            <option value="third">3</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputProductName" class="form-label">上市年分</label>
+                        <input type="text" class="form-control" id="inputProductName" name="year" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputUnitPrice" class="form-label">商品單價</label>
+                        <input type="number" class="form-control" id="inputUnitPrice" name="price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputUnitPrice" class="form-label">庫存數量</label>
+                        <input type="number" class="form-control" id="inputUnitPrice" name="volume" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputProductDesc" class="form-label">商品敘述</label>
+                        <textarea class="form-control" id="inputProductDesc" name="description" required></textarea>
+                    </div>
+                    <!-- <div class="mb-3">
+                        <label for="inputProductImg" class="form-label">商品圖片</label><br/>
+                        <input type="file" name="file" id="file-uploader" data-target="file-uploader" required/>
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-success">確定新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<br />
+
+<div class="container-xxl">
+
+    <form method='post' action={{ url_for('manager.productManager') }}>
+        <table id="manager" class="table table-bordered" style="background-color: #2e2e2e;">
+            <thead>
+                <tr>
+                    <th width="7%">
+                        <center style="color: #fff; font-weight: 600;">商品編號</center>
+                    </th>
+                    <th width="14%">
+                        <center style="color: #fff; font-weight: 600;">商品名稱</center>
+                    </th>
+                    <th width="7%">
+                        <center style="color: #fff; font-weight: 600;">類別編號</center>
+                    </th>
+                    <th width="10%">
+                        <center style="color: #fff; font-weight: 600;">類別名稱</center>
+                    </th>
+                    <th width="12%">
+                        <center style="color: #fff; font-weight: 600;">商品品牌</center>
+                    </th>
+                    <th width="7%">
+                        <center style="color: #fff; font-weight: 600;">商品狀態</center>
+                    </th>
+                    <th width="7%">
+                        <center style="color: #fff; font-weight: 600;">商品級別</center>
+                    </th>
+                    <th width="7%">
+                        <center style="color: #fff; font-weight: 600;">上市年分</center>
+                    </th>
+                    <th width="7%">
+                        <center style="color: #fff; font-weight: 600;">商品單價</center>
+                    </th>
+                    <th width="7%">
+                        <center style="color: #fff; font-weight: 600;">庫存數量</center>
+                    </th>
+                    <th colspan="2">
+                        <center style="color: #fff; font-weight: 600;">資料操作</center>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="product">
+                {% for i in book_data %}
+                <tr>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.商品編號 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.商品名稱 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.類別編號 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.商品類別 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.商品品牌 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.商品狀態 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.商品級別 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.上市年分 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.商品售價 }}</center>
+                    </td>
+                    <td>
+                        <center style="color: #fff; font-weight: 200;">{{ i.庫存數量 }}</center>
+                    </td>
+                    <td>
+                        <center><button type="submit" value="{{i.商品編號}}" name="edit"
+                                class="btn btn-success" 
+                                style="font-size: 15px; width: 100px; background-color: #98817B; border: 1px solid #98817B;">編輯商品</button></center>
+                    </td>
+                    <td>
+                        <center><button type="submit" value="{{i.商品編號}}" name="delete"
+                                onclick="return (confirm('你確定要刪除 \'{{ i.商品名稱 }}\' 嗎？'))"
+                                class="btn btn-danger" style="font-size: 15px; width: 100px; background-color: #2e2e2e; border: 1px solid #fff;">刪除商品</button></center>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </form>
+
+
+</div>
+
+<script>
+    function have_product() {
+        alert('有使用者有使用到這筆資料，所以不能刪除');
+    }
+</script>
+
+{% endblock content %}
